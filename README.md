@@ -67,10 +67,14 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
-## PYTHON Setup
+## Python Setup
 Change directory into the api folder
 
+
 run:
+
 python -m venv venv
+
 source venv\Scripts\activate
+
 pip install flask python-dotenv 
