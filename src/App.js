@@ -1,34 +1,33 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect, Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    fetch('/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
-    });
-  }, []);
+class App extends Component {
+  state= {
+    src: ''
+}
+handleChange = (e) => {
+    this.setState ({
+        [e.target.id]: e.target.value
+    })
+    console.log(this.state)
+}
+handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(this.state)
+}
+  render(){
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Esports Analysis
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Valorant and Overwatch 2 and CSGO and League
-        </a>
-        <p>The current time is {currentTime}.</p>
+        <div className="input-field">
+          <input type="text" id="src" onChange={this.handleChange}/>
+        </div>
+        <img src={this.state.src} width="800" height="500" />
       </header>
     </div>
   );
+  }
 }
 
 export default App;
