@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Valorant and Overwatch
+          Valorant and Overwatch 2 and CSGO and League
         </a>
       </header>
     </div>
