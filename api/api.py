@@ -1,46 +1,37 @@
-import time
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
+from flask_cors import CORS, cross_origin
+import logging
 
-UPLOAD_FOLDER = 'ok'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+logging.basicConfig(level=logging.INFO)
+
+logger = logging.getLogger('HELLO WORLD')
+
+
+
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route('/time')
-def get_current_time():
-    return {'time': time.time()}
+@app.route('/upload', methods=['POST'])
+def fileUpload():
+    target=os.path.join(UPLOAD_FOLDER,'test_docs')
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    logger.info("welcome to upload`")
+    file = request.files['file'] 
+    filename = secure_filename(file.filename)
+    destination="/".join([target, filename])
+    file.save(destination)
+    session['uploadFilePath']=destination
+    response="Whatever you wish too return"
+    return response
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+if __name__ == "__main__":
+    app.secret_key = os.urandom(24)
+    app.run(debug=True,host="0.0.0.0",use_reloader=False)
 
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return 'File Upload Success'
-            #return redirect(url_for('uploaded_file',filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+flask_cors.CORS(app, expose_headers='Authorization')
