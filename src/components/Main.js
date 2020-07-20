@@ -5,7 +5,7 @@ class Main extends React.Component {
     super(props);
 
     this.state = {
-      imageURL: 'http://localhost:5000/get-image',
+      imageURL: '',
     };
 
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -27,39 +27,22 @@ class Main extends React.Component {
       });
     });
   }
-  getImage(ev){
-    ev.preventDefault();
-
-
-    fetch('http://localhost:5000/get-image', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      this.setState({ src: `http://localhost:5000/get-image` });
-    })
-  }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleUploadImage}>
-          <div>
-            <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-          </div>
-          <div>
-            <input ref={(ref) => { this.fileName = ref; }} type="text" placeholder="Enter the desired name of file" />
-          </div>
-          <br />
-          <div>
-            <button>Upload</button>
-          </div>
-          <img src={this.state.imageURL} alt="img" />
-        </form>
-        <button onClick={this.getImage}>okayokay</button>
-      </div>
+      <form onSubmit={this.handleUploadImage}>
+        <div>
+          <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
+        </div>
+        <div>
+          <input ref={(ref) => { this.fileName = ref; }} type="text" placeholder="Enter the desired name of file" />
+        </div>
+        <br />
+        <div>
+          <button>Upload</button>
+        </div>
+        <img src={this.state.imageURL} alt="img" />
+      </form>
     );
   }
 }

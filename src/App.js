@@ -7,11 +7,24 @@ class App extends Component {
   state= {
     src: ''
 }
-
+handleChange = (e) => {
+    this.setState ({
+        [e.target.id]: e.target.value
+    })
+    console.log(this.state)
+}
+handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(this.state)
+}
   render(){
   return (
     <div >
       <header>
+        {/* <div className="input-field">
+          <input type="text" id="src" onChange={this.handleChange}/>
+        </div>
+        <img src={this.state.src} width="800" height="500" /> */}
         <Main />
       </header>
     </div>
