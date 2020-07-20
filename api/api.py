@@ -1,12 +1,13 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, session
+#import cv2
+from flask import Flask, flash, request, redirect, url_for, session, send_file
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
-#import logging
+import logging
 
-#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
-#logger = logging.getLogger('HELLO WORLD')
+logger = logging.getLogger('HELLO WORLD')
 
 
 
@@ -17,12 +18,16 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'ok'
 
+@app.route('/get-image', methods=['GET'])
+def get_image():
+    return send_file('./ok/test_docs/Switch_Overwatch_01.jpg', 'image/jpg')
+
 @app.route('/upload', methods=['POST'])
 def fileUpload():
     target=os.path.join(UPLOAD_FOLDER,'test_docs')
     if not os.path.isdir(target):
         os.mkdir(target)
-    #logger.info("welcome to upload`")
+    logger.info("welcome to upload`")
     file = request.files['file'] 
     filename = secure_filename(file.filename)
     destination="/".join([target, filename])
