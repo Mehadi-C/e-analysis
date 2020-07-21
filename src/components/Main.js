@@ -5,7 +5,7 @@ class Main extends React.Component {
     super(props);
 
     this.state = {
-      imageURL: 'http://localhost:5000/get-image',
+      imageURL: 'http://localhost:5000/video_feed',
     };
 
     this.handleUploadImage = this.handleUploadImage.bind(this);
