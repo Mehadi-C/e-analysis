@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, session, send_file, Response
+from flask import Flask, flash, request, redirect, url_for, session, send_file, Response, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 import cv2
@@ -19,6 +19,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'ok'
 
+
 @app.route('/get-image', methods=['GET'])
 def get_image():
     return send_file('./ok/test_docs/Switch_Overwatch_01.jpg', 'image/jpg')
@@ -32,7 +33,10 @@ def gen(camera):
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(VideoCamera()),
+    video_name = request.args.get('vid_name')
+    if video_name == None:
+        video_name = "duelists-valorant.mp4"
+    return Response(gen(VideoCamera(video_name)),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/upload', methods=['POST'])
@@ -46,8 +50,9 @@ def fileUpload():
     destination="/".join([target, filename])
     file.save(destination)
     session['uploadFilePath']=destination
-    response="Whatever you wish too return"
-    return response
+    response= destination.lstrip("ok\\")
+
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(24)

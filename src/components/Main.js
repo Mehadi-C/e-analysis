@@ -5,7 +5,7 @@ class Main extends React.Component {
     super(props);
 
     this.state = {
-      imageURL: 'http://localhost:5000/video_feed',
+      imageURL: 'http://localhost:5000/video_feed?vid_name=test_docs/overwatch_video_Trim.mp4',
     };
 
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -17,13 +17,14 @@ class Main extends React.Component {
     const data = new FormData();
     data.append('file', this.uploadInput.files[0]);
     data.append('filename', this.fileName.value);
-
+    console.log(data)
     fetch('http://localhost:5000/upload', {
       method: 'POST',
       body: data,
     }).then((response) => {
       response.json().then((body) => {
-        this.setState({ imageURL: `http://localhost:5000/${body.file}` });
+        console.log(body)
+        this.setState({ imageURL: `http://localhost:5000/video_feed?vid_name=${body}` });
       });
     });
   }

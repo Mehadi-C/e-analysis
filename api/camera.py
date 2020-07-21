@@ -4,9 +4,11 @@ face_cascade = cv2.CascadeClassifier("./Resources/haarcascade_frontalface_defaul
 ds_factor=0.6
 
 class VideoCamera(object):
-    def __init__(self):
+    def __init__(self,abceee):
        #capturing video
-       self.video = cv2.VideoCapture("./ok/duelists-valorant.mp4")
+       print(abceee)
+       file = "./ok/" + abceee 
+       self.video = cv2.VideoCapture(file)
     
     def __del__(self):
         #releasing camera
