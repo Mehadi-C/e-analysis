@@ -1,0 +1,15 @@
+item {
+    name: "death",
+    id: 1,
+    display_name: "death"
+}
+item {
+    name: "kill",
+    id: 2,
+    display_name: "kill"
+}
+item {
+    name: "missing",
+    id: 3,
+    display_name: "missing"
+}

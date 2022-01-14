@@ -1,0 +1,20 @@
+item {
+	id: 1
+	name: 'death'
+}
+
+item {
+	id: 2
+	name: 'kill'
+}
+
+item {
+	id: 3
+	name: 'missing'
+}
+
+item {
+	id: 4
+	name: 'payload'
+}
+

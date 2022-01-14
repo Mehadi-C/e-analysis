@@ -1,0 +1,15 @@
+item {
+    name: "phoenix",
+    id: 1,
+    display_name: "phoenix"
+}
+item {
+    name: "raze",
+    id: 2,
+    display_name: "raze"
+}
+item {
+    name: "reyna",
+    id: 3,
+    display_name: "reyna"
+}
