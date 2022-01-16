@@ -1,2 +1,1 @@
-web: npm run serve
-web: gunicorn wsgi:app
+web: gunicorn wsgi:app --log-level=debug

@@ -20,6 +20,11 @@ app.config['LOWSTORAGE'] = True
 app.config['MAXSTORAGE'] = 30 * 1024 * 1024
 app.config['MAX_CONTENT_LENGTH'] = 30 * 1024 * 1024
 
+gunicorn_logger = logging.getLogger('gunicorn.error')
+app.logger.handlers = gunicorn_logger.handlers
+app.logger.setLevel(gunicorn_logger.level)
+
+
 def check_file(filename):
     result = -2
     #Check for extension
@@ -64,6 +69,7 @@ def fileUpload():
     if(app.config['LOWSTORAGE']):
         reset_folder()
     #Setup destination
+    app.logger.info(str(os.listdir()))
     id = secrets.token_urlsafe(16)
     target=UPLOAD_FOLDER + '/' + id
     res = os.path.isdir(target)
