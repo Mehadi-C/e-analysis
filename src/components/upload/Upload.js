@@ -7,6 +7,7 @@ import Dropzone from 'react-dropzone';
 
 
 const Upload=()=>{
+    const api_url = 'https://e-analysis.herokuapp.com/'
     const [controls,setControls]=useState(true);
     const [image,setImage]=useState('');
     const [video,setVideo]=useState('');
@@ -17,16 +18,16 @@ const Upload=()=>{
         console.log(files)
         const options={}
         
-        axios.post('http://127.0.0.1:5000/api',formData,options).then(res=>
+        axios.post(api_url + 'api',formData,options).then(res=>
         { 
                 console.log(res)
                 setTimeout(()=>{
                     console.log(res.data.img);
                     if(res.data.img !== undefined){
-                        setImage('http://127.0.0.1:5000/img/'+res.data.img);
+                        setImage(api_url + 'img/'+res.data.img);
                     }
                     if(res.data.vid !== undefined){
-                        setVideo('http://127.0.0.1:5000/img/'+res.data.vid);
+                        setVideo(api_url + 'img/'+res.data.vid);
                     }
                 },2000)
         }

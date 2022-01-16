@@ -4,15 +4,8 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 import flask_cors 
 import process 
-import logging
 import secrets
 import shutil
-
-
-
-logging.basicConfig(level=logging.INFO)
-
-logger = logging.getLogger('HELLO WORLD')
 
 
 UPLOAD_FOLDER = 'storage'
@@ -105,8 +98,7 @@ def fileUpload():
     return {'id':id}
 
 if __name__ == "__main__":
-    app.secret_key = os.urandom(24)
-    app.run(debug=True,host="0.0.0.0",use_reloader=True)
+    app.run()
 
 flask_cors.CORS(app, expose_headers='Authorization')
 
