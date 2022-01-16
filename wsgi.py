@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, session, send_file
+from flask import Flask, flash, request, redirect, url_for, session, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 from flask_cors import CORS, cross_origin
 import flask_cors 
@@ -14,7 +14,7 @@ img_always = {'bmp', 'dib','pbm', 'pgm', 'ppm', 'pxm', 'pnm' , 'sr', 'ras' ,'hdr
 img_maybe = {'tiff', 'tif', 'exr', 'jpeg', 'jpg', 'jpe', 'jp2', 'png', 'webp'} 
 vid_ext = {'avi','mp4'}
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='build',static_url_path='')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['LOWSTORAGE'] = True
 app.config['MAXSTORAGE'] = 30 * 1024 * 1024
@@ -96,6 +96,11 @@ def fileUpload():
         return 'Invalid File'
 
     return {'id':id}
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
+
 
 if __name__ == "__main__":
     app.run()
