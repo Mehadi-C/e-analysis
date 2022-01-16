@@ -17,9 +17,9 @@ def check_image(path):
 
 
 def mkvid(path,outpath):
-    limit = 100
+    limit = 10
     curr = 1
-
+    print(path)
     faceCascade = cv2.CascadeClassifier("cascade.xml")
 
     cap = cv2.VideoCapture(path)

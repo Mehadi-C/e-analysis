@@ -6,6 +6,7 @@ import process
 import sys
 import shutil
 from flask import Flask, flash, request, redirect, url_for, send_file
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'originals'
@@ -18,6 +19,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['LOWSTORAGE'] = True
 app.config['MAXSIZE_MB'] = 25
+CORS(app)
 
 def check_file(filename):
     result = -2
@@ -44,9 +46,95 @@ def get_filesize(file):
     file_length = file.tell()
     return file_length
 
+@app.route('/api', methods=['POST'])
+def api_file():
+    id = {'Error':100}
+    if(not app.config['LOWSTORAGE']):
+        reset_folder()
+
+    #Uploading a file
+    if request.method == 'POST':
+        print(request)
+        if 'file' not in request.files:
+            print('No file part')
+            return redirect(request.url)
+
+        file = request.files['file']
+        size = get_filesize(file)
+        if file.filename == '':
+            print('No selected file')
+            return redirect(request.url)
+        elif not file:
+            print('Not file??')
+            return redirect(request.url)
+        elif (size > app.config['MAXSIZE_MB']*1000*1000):
+            print('FILE TOO LARGE')
+            return 'FILE TOO LARGE'
+        #If File is an image
+        elif  ((check_file(file.filename)==1) | (check_file(file.filename)==0)):           
+            #Make unique path
+            import secrets
+            id = secrets.token_urlsafe(16)
+            path = 'storage'+'/'+id
+            res = os.path.isdir(path)
+            while res:
+                id = secrets.token_urlsafe(16)
+                path = 'storage'+'/'+id
+                res = os.path.isdir(path)
+            os.mkdir(path)
+
+
+            #Get filename
+            filename = secure_filename(file.filename)
+            upload_path = os.path.join(path, filename)
+            file.save(upload_path)
+
+            #Process and save images
+            res = process.check_image(upload_path)
+            #Delete original and write processed image
+            process.cv2.imwrite(upload_path,res)
+            
+            #return send_file(res)
+            return send_file(upload_path)
+        
+        #If file is video
+        if ((check_file(file.filename)==2)):
+            #Make unique path
+            import secrets
+            id = secrets.token_urlsafe(16)
+            path = 'storage'+'/'+id
+            res = os.path.isdir(path)
+            while res:
+                id = secrets.token_urlsafe(16)
+                path = 'storage'+'/'+id
+                res = os.path.isdir(path)
+            os.mkdir(path)
+
+
+            #Get filename
+            filename = secure_filename(file.filename)
+            upload_path = os.path.join(path, filename)
+            file.save(upload_path)
+
+            #Process and save images
+            res = process.mkvid(upload_path,path)
+            #Delete original and write processed image
+            #process.cv2.imwrite(upload_path,res)
+            
+            #return send_file(res)
+            return send_file(res)
+
+            #return 'File Upload Success'
+            #return redirect('/image')
+            #return redirect(url_for('upload_file',filename=filename))
+
+    return id
+
+
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
-    if(app.config['LOWSTORAGE']):
+    if(not app.config['LOWSTORAGE']):
         reset_folder()
 
     #Uploading a file
