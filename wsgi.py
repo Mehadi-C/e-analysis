@@ -40,8 +40,9 @@ def check_file(filename):
     return result #Bad extension
 
 def reset_folder():
+
     #Remove storage folder to stay in size limit
-    path = 'storage/'
+    path = UPLOAD_FOLDER+'/'
     shutil.rmtree(path)
     os.mkdir(path)
 
@@ -67,7 +68,8 @@ def getvid(id):
 
 @app.route('/api', methods=['POST'])
 def fileUpload():
-    app.logger.info(str(os.listdir()))
+    if (not os.path.isdir(UPLOAD_FOLDER+'/')):
+        os.mkdir(UPLOAD_FOLDER + '/')
     if(app.config['LOWSTORAGE']):
         reset_folder()
     #Setup destination
