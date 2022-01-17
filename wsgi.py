@@ -24,7 +24,7 @@ app.config['MAX_CONTENT_LENGTH'] = 30 * 1024 * 1024
 gunicorn_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers = gunicorn_logger.handlers
 app.logger.setLevel(gunicorn_logger.level)
-
+app.logger.info("START")
 
 def check_file(filename):
     result = -2
@@ -67,6 +67,7 @@ def getvid(id):
 
 @app.route('/api', methods=['POST'])
 def fileUpload():
+    app.logger.info(str(os.listdir()))
     if(app.config['LOWSTORAGE']):
         reset_folder()
     #Setup destination
